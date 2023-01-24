@@ -1,0 +1,184 @@
+df.agg[order(df.agg$FScore, decreasing=TRUE),]
+             task                          algo       BAC    FScore       GMean
+15     Aggregated       classif.nnet.overbagged 0.8708687 0.8694717 0.905806286
+5      Aggregated                   classif.svm 0.8583093 0.8660905 0.892570721
+23 Color Channels                   classif.svm 0.8575480 0.8613494 0.894585261
+41       Complete                   classif.svm 0.8499104 0.8601852 0.885208948
+40       Complete                classif.ranger 0.8533169 0.8600085 0.891231460
+51       Complete       classif.nnet.overbagged 0.8630177 0.8593337 0.898197063
+12     Aggregated   classif.multinom.overbagged 0.8582311 0.8582335 0.896718862
+3      Aggregated              classif.multinom 0.8577355 0.8568935 0.896106222
+20 Color Channels                  classif.kknn 0.8460972 0.8527820 0.885535932
+50       Complete        classif.svm.overbagged 0.8434343 0.8462508 0.883259453
+4      Aggregated                classif.ranger 0.8392563 0.8454833 0.879700485
+22 Color Channels                classif.ranger 0.8343958 0.8415713 0.874886685
+14     Aggregated        classif.svm.overbagged 0.8391250 0.8408761 0.880736256
+49       Complete     classif.ranger.overbagged 0.8394949 0.8401290 0.880410439
+6      Aggregated                  classif.nnet 0.8446515 0.8397900 0.883548203
+32 Color Channels        classif.svm.overbagged 0.8403479 0.8387174 0.883270548
+33 Color Channels       classif.nnet.overbagged 0.8461446 0.8371608 0.886178042
+21 Color Channels              classif.multinom 0.8306263 0.8337027 0.872568020
+48       Complete   classif.multinom.overbagged 0.8365221 0.8335648 0.878168763
+2      Aggregated                  classif.kknn 0.8275587 0.8324326 0.870772321
+29 Color Channels       classif.kknn.overbagged 0.8287285 0.8278586 0.873651986
+42       Complete                  classif.nnet 0.8329861 0.8263093 0.875309453
+39       Complete              classif.multinom 0.8292431 0.8252203 0.870954964
+31 Color Channels     classif.ranger.overbagged 0.8215284 0.8224946 0.866602307
+25 Color Channels            classif.naiveBayes 0.8184747 0.8194149 0.862905537
+38       Complete                  classif.kknn 0.8128529 0.8182821 0.859095153
+13     Aggregated     classif.ranger.overbagged 0.8141086 0.8133236 0.861472540
+24 Color Channels                  classif.nnet 0.8172740 0.8115123 0.858902373
+34 Color Channels classif.naiveBayes.overbagged 0.8112431 0.8094171 0.859094722
+30 Color Channels   classif.multinom.overbagged 0.8149343 0.8072332 0.860834213
+47       Complete       classif.kknn.overbagged 0.8088775 0.8049240 0.856353784
+11     Aggregated       classif.kknn.overbagged 0.8068428 0.8040595 0.855295794
+75 Other Features              classif.multinom 0.7908984 0.7908330 0.845608018
+77 Other Features                   classif.svm 0.7701711 0.7848265 0.822883914
+87 Other Features       classif.nnet.overbagged 0.7869855 0.7829310 0.840034032
+84 Other Features   classif.multinom.overbagged 0.7843068 0.7768449 0.839357882
+46       Complete      classif.rpart.overbagged 0.7822090 0.7718897 0.834851973
+37       Complete                 classif.rpart 0.7693889 0.7662131 0.824934575
+76 Other Features                classif.ranger 0.7511654 0.7642198 0.806742585
+10     Aggregated      classif.rpart.overbagged 0.7571793 0.7492849 0.813770486
+28 Color Channels      classif.rpart.overbagged 0.7580821 0.7488702 0.814583521
+78 Other Features                  classif.nnet 0.7527607 0.7451124 0.814756517
+86 Other Features        classif.svm.overbagged 0.7441477 0.7366554 0.799691152
+19 Color Channels                 classif.rpart 0.7133750 0.7147143 0.780699187
+1      Aggregated                 classif.rpart 0.7102229 0.7092809 0.779074215
+85 Other Features     classif.ranger.overbagged 0.7166458 0.7080578 0.775398978
+7      Aggregated            classif.naiveBayes 0.7280909 0.6885132 0.786269322
+59     Histograms                   classif.svm 0.6682273 0.6880527 0.729547231
+16     Aggregated classif.naiveBayes.overbagged 0.7262803 0.6851659 0.785221516
+74 Other Features                  classif.kknn 0.6730486 0.6816472 0.742595314
+52       Complete classif.naiveBayes.overbagged 0.7225960 0.6776578 0.778417976
+69     Histograms       classif.nnet.overbagged 0.6860164 0.6774097 0.749397677
+57     Histograms              classif.multinom 0.6586566 0.6737991 0.725655610
+43       Complete            classif.naiveBayes 0.7166622 0.6725026 0.772678182
+60     Histograms                  classif.nnet 0.6670701 0.6713786 0.728763924
+83 Other Features       classif.kknn.overbagged 0.6745524 0.6676154 0.747245228
+58     Histograms                classif.ranger 0.6484040 0.6609910 0.711472971
+67     Histograms     classif.ranger.overbagged 0.6543087 0.6561747 0.716032876
+82 Other Features      classif.rpart.overbagged 0.6712191 0.6483041 0.730643066
+73 Other Features                 classif.rpart 0.6443460 0.6481803 0.724006635
+55     Histograms                 classif.rpart 0.6200429 0.6350927 0.681397752
+66     Histograms   classif.multinom.overbagged 0.6567229 0.6305854 0.717795078
+68     Histograms        classif.svm.overbagged 0.6533390 0.6292061 0.709786180
+56     Histograms                  classif.kknn 0.6134047 0.6273157 0.682656026
+64     Histograms      classif.rpart.overbagged 0.6203497 0.6082728 0.666924943
+65     Histograms       classif.kknn.overbagged 0.6086098 0.5960829 0.681707036
+61     Histograms            classif.naiveBayes 0.5316553 0.4750555 0.589754310
+88 Other Features classif.naiveBayes.overbagged 0.4760612 0.3985991 0.520733907
+79 Other Features            classif.naiveBayes 0.4776812 0.3973616 0.514526700
+70     Histograms classif.naiveBayes.overbagged 0.4598327 0.3644746 0.471150323
+62     Histograms                        Random 0.3449975 0.3415250 0.419721778
+44       Complete                        Random 0.3360865 0.3320093 0.411128790
+26 Color Channels                        Random 0.3339173 0.3296188 0.408532542
+8      Aggregated                        Random 0.3281711 0.3243593 0.398759483
+80 Other Features                        Random 0.3171761 0.3147361 0.380436753
+35 Color Channels             Random.overbagged 0.3491294 0.3017555 0.367310136
+89 Other Features             Random.overbagged 0.3495915 0.2996674 0.366536772
+71     Histograms             Random.overbagged 0.3363176 0.2927045 0.359232964
+53       Complete             Random.overbagged 0.3388068 0.2918012 0.356503208
+17     Aggregated             Random.overbagged 0.3163510 0.2767182 0.337678296
+36 Color Channels           Majority.overbagged 0.3339015 0.2524631 0.003777692
+72     Histograms           Majority.overbagged 0.3332727 0.2523387 0.006522732
+18     Aggregated           Majority.overbagged 0.3333731 0.2521745 0.006424171
+63     Histograms                      Majority 0.3333333 0.2516515 0.000000000
+27 Color Channels                      Majority 0.3333333 0.2516508 0.000000000
+9      Aggregated                      Majority 0.3333333 0.2516505 0.000000000
+81 Other Features                      Majority 0.3333333 0.2516489 0.000000000
+45       Complete                      Majority 0.3333333 0.2516483 0.000000000
+54       Complete           Majority.overbagged 0.3333333 0.2516483 0.000000000
+90 Other Features           Majority.overbagged 0.3332595 0.2490653 0.006489421
+      Setup   algo.name
+15 Balanced         MLP
+5  Original         SVM
+23 Original         SVM
+41 Original         SVM
+40 Original          RF
+51 Balanced         MLP
+12 Balanced Multinomial
+3  Original Multinomial
+20 Original         KNN
+50 Balanced         SVM
+4  Original          RF
+22 Original          RF
+14 Balanced         SVM
+49 Balanced          RF
+6  Original         MLP
+32 Balanced         SVM
+33 Balanced         MLP
+21 Original Multinomial
+48 Balanced Multinomial
+2  Original         KNN
+29 Balanced         KNN
+42 Original         MLP
+39 Original Multinomial
+31 Balanced          RF
+25 Original          NB
+38 Original         KNN
+13 Balanced          RF
+24 Original         MLP
+34 Balanced          NB
+30 Balanced Multinomial
+47 Balanced         KNN
+11 Balanced         KNN
+75 Original Multinomial
+77 Original         SVM
+87 Balanced         MLP
+84 Balanced Multinomial
+46 Balanced          DT
+37 Original          DT
+76 Original          RF
+10 Balanced          DT
+28 Balanced          DT
+78 Original         MLP
+86 Balanced         SVM
+19 Original          DT
+1  Original          DT
+85 Balanced          RF
+7  Original          NB
+59 Original         SVM
+16 Balanced          NB
+74 Original         KNN
+52 Balanced          NB
+69 Balanced         MLP
+57 Original Multinomial
+43 Original          NB
+60 Original         MLP
+83 Balanced         KNN
+58 Original          RF
+67 Balanced          RF
+82 Balanced          DT
+73 Original          DT
+55 Original          DT
+66 Balanced Multinomial
+68 Balanced         SVM
+56 Original         KNN
+64 Balanced          DT
+65 Balanced         KNN
+61 Original          NB
+88 Balanced          NB
+79 Original          NB
+70 Balanced          NB
+62 Original      Random
+44 Original      Random
+26 Original      Random
+8  Original      Random
+80 Original      Random
+35 Balanced      Random
+89 Balanced      Random
+71 Balanced      Random
+53 Balanced      Random
+17 Balanced      Random
+36 Balanced    Majority
+72 Balanced    Majority
+18 Balanced    Majority
+63 Original    Majority
+27 Original    Majority
+9  Original    Majority
+81 Original    Majority
+45 Original    Majority
+54 Balanced    Majority
+90 Balanced    Majority
+> 
