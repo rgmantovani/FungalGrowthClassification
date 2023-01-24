@@ -330,6 +330,45 @@ sel.df = m3[sel.ids,]
 #   1 312  12   1
 #   2   9  90   7
 #   3   5   6  94
+
+
+##------------------------------------------------------------------------------------------
+#  Interpretability plots
+##------------------------------------------------------------------------------------------
+
+## Random Forest
+
+# task = as_task_classif(df_all2_resc, id = "Agregado", target = "rotulo")
+# clf_rf  = lrn("classif.ranger", id = "Random Forest", importance = "permutation")
+# clf_rf$train(task)
+# clf_rf$importance()
+
+# importance = as.data.table(clf_rf$importance(), keep.rownames = TRUE)
+# colnames(importance) = c("Feature", "Importance")
+# g_importance = ggplot(importance, aes(x = reorder(Feature, Importance), y = Importance)) +
+#   geom_col(width = 0.8,fill="lightblue",col="darkblue")  + labs(y="Importance", x = "Feature") + theme_bw() 
+
+# g_importance10 = ggplot(importance[1:10,], aes(x = reorder(Feature, Importance), y = Importance)) +
+#   geom_col(width = 0.8,fill="lightblue",col="darkblue") + coord_flip() + labs(y="Importance", x = "Feature") + theme_bw() 
+    
+# png("rf_importance.png", units="in", width=9, height=6, res=300, pointsize = 20)
+# g_importance
+# dev.off()
+
+
+# Árvore de decisão
+
+# library(rpart)
+# tr<-rpart(rotulo~.,
+#            data=df_all2_resc)
+# library (rpart.plot)
+# rpart.plot(tr,fallen.leaves=F, tweak=1,type=1,cex=0.35)
+
+# options(OutDec = ",")     
+# png("arvore2.png", units="in", width=12.8, height=7.2, res=300, pointsize = 20)
+# rpart.plot(tr,fallen.leaves=F, tweak=1.2,type=2, shadow.col="gray",extra=104, branch=0)
+# dev.off()
+
   
 ##------------------------------------------------------------------------------------------
 ##------------------------------------------------------------------------------------------
