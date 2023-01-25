@@ -38,5 +38,5 @@ Just use the commented commands to run script 02_ or 03_.
 
 ## Contact
 
-Edgar de Souza Vismara (edgarvismara@utfpr.edu.br), Federal Technology University - Paraná (UTFPR) - Dois Vizinhos - PR, Brazil.
-Rafael Gomes Mantovani (rgmantovani@gmail.com), Federal Technology University - Paraná (UTFPR) - Apucarana - PR, Brazil.
+- Edgar de Souza Vismara (edgarvismara@utfpr.edu.br), Federal Technology University - Paraná (UTFPR) - Dois Vizinhos - PR, Brazil.
+- Rafael Gomes Mantovani (rgmantovani@gmail.com), Federal Technology University - Paraná (UTFPR) - Apucarana - PR, Brazil.
