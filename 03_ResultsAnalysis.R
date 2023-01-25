@@ -356,32 +356,8 @@ sel.df = m3[sel.ids,]
 #  Interpretability plots
 ##------------------------------------------------------------------------------------------
 
-## Random Forest
-# df_all2_resc = read.csv(file = "data/dataset/task_aggregated.csv", row.names = 1)
-
-# library(mlr3)
-
-# task =  mlr3::as_task_classif(df_all2_resc, id = "Aggregated", target = "rotulo")
-# clf_rf  = lrn("classif.ranger", id = "Random Forest", importance = "permutation")
-
-# clf_rf$train(task)
-# clf_rf$importance()
-
-# importance = as.data.table(clf_rf$importance(), keep.rownames = TRUE)
-# colnames(importance) = c("Feature", "Importance")
-# g_importance = ggplot(importance, aes(x = reorder(Feature, Importance), y = Importance)) +
-#   geom_col(width = 0.8,fill="lightblue",col="darkblue")  + labs(y="Importance", x = "Feature") + theme_bw() 
-
-# g_importance10 = ggplot(importance[1:10,], aes(x = reorder(Feature, Importance), y = Importance)) +
-#   geom_col(width = 0.8,fill="lightblue",col="darkblue") + coord_flip() + labs(y="Importance", x = "Feature") + theme_bw() 
-    
-# png("rf_importance.png", units="in", width=9, height=6, res=300, pointsize = 20)
-# g_importance
-# dev.off()
-
-
 # --------------------------
-# Decision Tree
+## Decision Tree
 # --------------------------
 
 cat(" @ Plot: Decision Tree \n")
@@ -395,6 +371,30 @@ options(OutDec = ",")
 png("plots/fig_decision_tree.png", units="in", width=12.8, height=7.2, res=300, pointsize = 20)
 rpart.plot(tree,fallen.leaves=F, tweak=1.2,type=2, shadow.col="gray",extra=104, branch=0)
 dev.off()
+
+# --------------------------
+## Random Forest
+# --------------------------
+
+df_all2_resc = read.csv(file = "data/dataset/task_aggregated.csv", row.names = 1)
+
+mlrTask = mlr::makeClassifTask(df_all2_resc[,-1], id = "test", target = "rotulo")
+lrn     = mlr::makeLearner("classif.ranger", importance = "permutation")
+model   = mlr::train(task = mlrTask, learner = lrn)
+
+trueModel = model$learner.model
+
+importance = as.data.frame(trueModel$variable.importance)
+rf.df = cbind(rownames(importance), importance)
+rownames(rf.df) = NULL
+colnames(rf.df) = c("Feature", "Importance")
+
+g_importance = ggplot(rf.df, aes(x = reorder(Feature, Importance), y = Importance))
+g_importance = g_importance  + geom_col(width = 0.8, fill="lightblue", col="darkblue")
+g_importance = g_importance  + labs(y="Importance", x = "Feature") + coord_flip() + theme_bw() 
+# g_importance # for debug
+ggsave(g_importance, file = "plots/fig_randomForest.pdf", units = "in", width = 9, 
+	height = 6, dpi = 300, pointsize = 20)
 
 ##------------------------------------------------------------------------------------------
 ##------------------------------------------------------------------------------------------
