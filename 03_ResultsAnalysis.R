@@ -41,7 +41,7 @@ results$gmean = NULL
 # Boxplot: bac x fscore results
 # ---------------
 
-cat(" @ Plot: Performances' Boxplot:\n")
+cat(" @ Plot: Performances' Boxplot\n")
 
 # Using algorithm without overbagging
 ovb.ids = which(grepl(x = results$algo, pattern = "overbagged"))
@@ -356,6 +356,8 @@ sel.df = m3[sel.ids,]
 #  Interpretability plots
 ##------------------------------------------------------------------------------------------
 
+df_all2_resc = read.csv(file = "data/dataset/task_aggregated.csv", row.names = 1)
+
 # --------------------------
 ## Decision Tree
 # --------------------------
@@ -376,7 +378,7 @@ dev.off()
 ## Random Forest
 # --------------------------
 
-df_all2_resc = read.csv(file = "data/dataset/task_aggregated.csv", row.names = 1)
+cat(" @ Plot: Ranfom Forest (importance) \n")
 
 mlrTask = mlr::makeClassifTask(df_all2_resc[,-1], id = "test", target = "rotulo")
 lrn     = mlr::makeLearner("classif.ranger", importance = "permutation")
@@ -400,7 +402,7 @@ ggsave(g_importance, file = "plots/fig_randomForest.pdf", units = "in", width = 
 ##------------------------------------------------------------------------------------------
 
 cat("------------------------\n")
-cat (" @Done :\n)"
+cat (" @Done :)\n")
 cat("------------------------\n")
   
 ##------------------------------------------------------------------------------------------
