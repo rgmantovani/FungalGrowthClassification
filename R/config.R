@@ -5,18 +5,23 @@
 ALGOS.MLR  = c("rpart", "kknn", "multinom", "ranger", "svm", "nnet", "naiveBayes")
    
 # ---------------------------
-# Loading packages
+# Required packages
 # ---------------------------
 
 # If they are not installed, please, uncomment the following lines:
 # install.packages(c("ranger", "e1071", "caret", "kknn","scales", 
-   # "corrplot","factoextra","agricolae", "mlr", "metrica"))
+   # "corrplot","factoextra","agricolae", "mlr", "metrica", "rpart",
+   # "rpart.plot", "dplyr", "reshape2", "ggplot2"))
+
+# ---------------------------
+# Loading packages
+# ---------------------------
+
 
 library(mlr)
 library(tidyverse)
 library(caret)
 library(corrplot)
-library(agricolae)
 library(scales)
 library(factoextra)
 library(agricolae)

@@ -1,15 +1,25 @@
 ##-------------------------------------------------------------------------------------------
 ##-------------------------------------------------------------------------------------------
 
+cat(" @ Loading all required files:\n")
 library(ggplot2)
 library(reshape2)
-library(mlr)
 library(dplyr)
+
+## ------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------
+
+R.files = list.files(path = "R", full.names = TRUE)
+for(file in R.files) {
+  print(file)
+  source(file)
+}
 
 ##-------------------------------------------------------------------------------------------
 ##-------------------------------------------------------------------------------------------
 
 # use load() to read it again
+cat(" @ Loading results \n")
 load(file = "results/mlr_results_complete.RData", verbose = TRUE)
 
 ##-------------------------------------------------------------------------------------------
@@ -26,23 +36,24 @@ results$algo.name = results$algo
 results$algo.name = gsub(x = results$algo.name, pattern = ".overbagged", replacement = "")
 
 results$gmean = NULL
+
 # ---------------
 # Boxplot: bac x fscore results
 # ---------------
 
-# Filtrar só os algoritimos sem overbagging
+cat(" @ Plot: Performances' Boxplot:\n")
+
+# Using algorithm without overbagging
 ovb.ids = which(grepl(x = results$algo, pattern = "overbagged"))
 df = results[-ovb.ids,]
 
 # melt no data frame
 df.melt = melt(df, id.vars = c(1,2,3,6,7))
 
-# facet_grid com task~measure dividindo os caras
-
+# facet_grid with task~measure 
 gf = ggplot(data = df.melt, mapping = aes(x = algo, y = value, group = algo))
 gf = gf + geom_boxplot() + facet_grid(variable~task)
 gf = gf + theme(axis.text.x = element_text(angle = 90, hjust = 1))
-# gf = gf + labs(x="Algorithms", y="Balanced per Class Accuracy") 
 gf = gf + geom_hline(yintercept=0.8, linetype="dashed", color = "red")
 # gf
 ggsave(gf, file = "plots/fig_algorithms_performance.pdf", width = 8.8, height = 5.16)
@@ -51,7 +62,8 @@ ggsave(gf, file = "plots/fig_algorithms_performance.pdf", width = 8.8, height = 
 # Lineplot: Original vs Overbagged algos
 # ---------------
 
-# calcular agregado (media) - facil
+cat(" @ Plot: Lineplot - Original vs Overbagged Learners\n")
+
 df.agg = mlr::getBMRAggrPerformances(bmr = res, as.df = TRUE)
 colnames(df.agg) = c("task", "algo", "BAC", "FScore", "GMean")
  df.agg$GMean = NULL
@@ -95,11 +107,11 @@ g2 = g2 + labs(x = "Algorithm", y = "Value")
 g2 = g2 + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 g2 = g2 + scale_fill_manual(values = c("red", "black"))
 g2 = g2 + scale_colour_manual(values = c("red", "black"))
-g2 
+# g2 
 ggsave(g2, file = "plots/fig_original_vs_balanced.pdf", width = 9.66, height = 4.07)
 
 
-# TODO: check wilcoxon pair teste (balanced vs original)
+# TODO: check wilcoxon pair test (balanced vs original)
 
 # ---------------
 # Heatmap: Rankings
@@ -107,8 +119,7 @@ ggsave(g2, file = "plots/fig_original_vs_balanced.pdf", width = 9.66, height = 4
 
 # TODO: use this mlr::convertBMRToRankMatrix(res, measure = "bac.test")
 
-# average ranking by task
-all.tasks = unique(df.agg$task)
+cat(" @ Computing Rankings\n")
 
 bac.rankings = getRankings(df.agg = df.agg, measure = "BAC")
 bac.rankings$measure = "BAC"
@@ -127,27 +138,29 @@ tmp$algo = renameAlgoFactors(algos = tmp$algo)
 ids = order(colMeans(t(tmp[,-1])))
 
 # tmp[ids,]
-#                             algo avg.rk.bac avg.rk.fscore
-# 17                   classif.svm      2.4      1.4
-# 12       classif.nnet.overbagged      1.4      2.8
-# 7               classif.multinom      4.6      4.4
-# 13                classif.ranger      5.4      4.0
-# 18        classif.svm.overbagged      5.8      6.0
-# 8    classif.multinom.overbagged      5.6      6.6
-# 11                  classif.nnet      6.0      6.8
-# 14     classif.ranger.overbagged      7.2      7.2
-# 5                   classif.kknn      8.2      7.6
-# 6        classif.kknn.overbagged      9.6      9.8
-# 16      classif.rpart.overbagged     11.0     11.4
-# 15                 classif.rpart     12.4     11.4
-# 9             classif.naiveBayes     12.2     12.6
-# 10 classif.naiveBayes.overbagged     13.2     13.0
-# 3                         Random     16.4     15.0
-# 4              Random.overbagged     15.8     16.0
-# 2            Majority.overbagged     16.9     17.3
-# 1                       Majority     16.9     17.7
+#                    algo avg.rk.x avg.rk.y
+# 17                  SVM      2.4      1.4
+# 12         MLP.Balanced      1.4      2.8
+# 7           Multinomial      4.6      4.4
+# 13                   RF      5.4      4.0
+# 18         SVM.Balanced      5.8      6.0
+# 8  Multinomial.Balanced      5.6      6.6
+# 11                  MLP      6.0      6.8
+# 14          RF.Balanced      7.2      7.2
+# 5                   KNN      8.2      7.6
+# 6          KNN.Balanced      9.6      9.8
+# 16          DT.Balanced     11.0     11.4
+# 15                   DT     12.4     11.4
+# 9                    NB     12.2     12.6
+# 10          NB.Balanced     13.2     13.0
+# 3                Random     16.4     15.0
+# 4       Random.Balanced     15.8     16.0
+# 2     Majority.Balanced     16.9     17.3
+# 1              Majority     16.9     17.7
 
 df.rk$algo = factor(df.rk$algo, levels = tmp[ids,]$algo)
+
+cat(" @ Plot: Heatmap - Algorithms' Ranking\n")
 
 g3 = ggplot(df.rk, aes(x = algo, y = variable, fill = value))
 g3 = g3 + geom_tile()+ facet_grid(measure~.)
@@ -167,7 +180,9 @@ ggsave(g3, file = "plots/fig_average_ranking.pdf", width = 7.99, height = 4.39)
 # 12     Aggregated   classif.multinom.overbagged 0.8582311 0.8582335 0.896718862
 # 40       Complete                classif.ranger 0.8533169 0.8600085 0.891231460
 
-preds = getBMRPredictions(bmr = res, 
+cat(" @ Obtaining Top3 Algorithms' Predictions \n")
+
+preds = mlr::getBMRPredictions(bmr = res, 
 	learner.ids = c("classif.svm", "classif.nnet.overbagged", "classif.multinom.overbagged", "classif.ranger"),
 	task.ids = c("Aggregated", "Complete"))
 
@@ -175,6 +190,8 @@ preds = getBMRPredictions(bmr = res,
 # ---------------
 # Plot: confusion matrices
 # ---------------
+
+cat(" @ Plot: Confusion Matrices\n")
 
 svm.matrix = mlr::calculateConfusionMatrix(pred = preds$Aggregated$classif.svm)
 mlp.matrix = mlr::calculateConfusionMatrix(pred = preds$Aggregated$classif.nnet.overbagged)
@@ -203,10 +220,11 @@ for(i in 1:4) {
 
 }
 
-
 # ---------------
 # Plot: Voting composed by the top-3 algorithms
 # ---------------
+
+cat(" @ Computing Voting \n")
 
 df1 = preds$Aggregated$classif.svm
 df1 = aggregatePredictions(df = df1)
@@ -244,6 +262,8 @@ dff$variable = factor(dff$variable, levels = c("Reference", "Voting", "Multinomi
 	"MLP", "SVM"))
 
 
+cat(" @ Plot: Voting Predictions \n")
+
 g5 = ggplot(dff, aes(y = as.factor(id), x = variable, fill = value)) # colour = value))
 g5 = g5 + geom_tile() + theme_bw()
 g5 = g5 + theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
@@ -258,7 +278,7 @@ ggsave(g5, file = "plots/fig_voting_predictions.pdf", width = 7.45, height = 5.8
 # Voting preformance
 # --------------------------
 
-print(" - Voting Performance: ")
+print(" @ Voting Performance: ")
 
 obj.voting = caret::confusionMatrix(
 	as.factor(m3$Voting), #pred
@@ -272,7 +292,7 @@ obj.voting = caret::confusionMatrix(
 cat(" F-Measure:", f1, "\n") # [1] 0.9026198
 
 bc = mlr::measureBAC(truth = m3$truth, response = as.factor(m3$Voting))
-print(" Balanced accuracy: ", bc, "\n") # [1] 0.9014316
+cat(" Balanced accuracy: ", bc, "\n") # [1] 0.9014316
 
 # --------------------------
 # Checking images missclassified
@@ -337,9 +357,13 @@ sel.df = m3[sel.ids,]
 ##------------------------------------------------------------------------------------------
 
 ## Random Forest
+# df_all2_resc = read.csv(file = "data/dataset/task_aggregated.csv", row.names = 1)
 
-# task = as_task_classif(df_all2_resc, id = "Agregado", target = "rotulo")
+# library(mlr3)
+
+# task =  mlr3::as_task_classif(df_all2_resc, id = "Aggregated", target = "rotulo")
 # clf_rf  = lrn("classif.ranger", id = "Random Forest", importance = "permutation")
+
 # clf_rf$train(task)
 # clf_rf$importance()
 
@@ -356,19 +380,28 @@ sel.df = m3[sel.ids,]
 # dev.off()
 
 
-# Árvore de decisão
+# --------------------------
+# Decision Tree
+# --------------------------
 
-# library(rpart)
-# tr<-rpart(rotulo~.,
-#            data=df_all2_resc)
-# library (rpart.plot)
-# rpart.plot(tr,fallen.leaves=F, tweak=1,type=1,cex=0.35)
+cat(" @ Plot: Decision Tree \n")
 
-# options(OutDec = ",")     
-# png("arvore2.png", units="in", width=12.8, height=7.2, res=300, pointsize = 20)
-# rpart.plot(tr,fallen.leaves=F, tweak=1.2,type=2, shadow.col="gray",extra=104, branch=0)
-# dev.off()
+library(rpart)
+library (rpart.plot)
 
+tree = rpart(rotulo~., data=df_all2_resc[,-1], method = "class")
+# rpart.plot(tree,fallen.leaves=F, tweak=1,type=1,cex=0.35)
+options(OutDec = ",")     
+png("plots/fig_decision_tree.png", units="in", width=12.8, height=7.2, res=300, pointsize = 20)
+rpart.plot(tree,fallen.leaves=F, tweak=1.2,type=2, shadow.col="gray",extra=104, branch=0)
+dev.off()
+
+##------------------------------------------------------------------------------------------
+##------------------------------------------------------------------------------------------
+
+cat("------------------------\n")
+cat (" @Done :\n)"
+cat("------------------------\n")
   
 ##------------------------------------------------------------------------------------------
 ##------------------------------------------------------------------------------------------

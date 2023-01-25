@@ -42,4 +42,23 @@ df.rk[order(df.rk$avg.rk),]
 18         17             17     17.5         17             18   17.3           Majority.overbagged
 9          18             18     17.5         18             17   17.7                      Majority
 
-
+#Averaged ranking
+                   algo avg.rk.x avg.rk.y
+# 17                  SVM      2.4      1.4
+# 12         MLP.Balanced      1.4      2.8
+# 7           Multinomial      4.6      4.4
+# 13                   RF      5.4      4.0
+# 18         SVM.Balanced      5.8      6.0
+# 8  Multinomial.Balanced      5.6      6.6
+# 11                  MLP      6.0      6.8
+# 14          RF.Balanced      7.2      7.2
+# 5                   KNN      8.2      7.6
+# 6          KNN.Balanced      9.6      9.8
+# 16          DT.Balanced     11.0     11.4
+# 15                   DT     12.4     11.4
+# 9                    NB     12.2     12.6
+# 10          NB.Balanced     13.2     13.0
+# 3                Random     16.4     15.0
+# 4       Random.Balanced     15.8     16.0
+# 2     Majority.Balanced     16.9     17.3
+# 1              Majority     16.9     17.7
