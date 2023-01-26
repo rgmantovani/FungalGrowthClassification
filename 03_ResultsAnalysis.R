@@ -55,6 +55,8 @@ df = results[-ovb.ids,]
 df$algo = renameAlgoFactors(df$algo)
 df.melt = melt(df, id.vars = c(1,2,3,6,7))
 
+# TODO: rename bac to BAC and fscore to FScore (colnames)
+
 # facet_grid with task~measure 
 gf = ggplot(data = df.melt, 
 	mapping = aes(x = reorder(algo, value, decreasing = TRUE),
@@ -74,7 +76,7 @@ cat(" @ Plot: Lineplot - Original vs Overbagged Learners\n")
 
 df.agg = mlr::getBMRAggrPerformances(bmr = res, as.df = TRUE)
 colnames(df.agg) = c("task", "algo", "BAC", "FScore", "GMean")
- df.agg$GMean = NULL
+df.agg$GMean = NULL
 
 ids =  which(grepl(x = df.agg$algo, pattern = "overbagged"))
 df.agg$Setup = "Original"
@@ -91,8 +93,8 @@ bac.sd = getSdsFromRepetitions(results = results, measure = "bac")
 fsc.sd = getSdsFromRepetitions(results = results, measure = "fscore") 
 
 # new order of factor levels
-df.agg$algo.name = factor(df.agg$algo.name, levels = c("MLP", "SVM", "Multinomial", 
-	"RF", "KNN", "NB", "DT", "Random", "Majority"))
+df.agg$algo.name = factor(df.agg$algo.name, levels = c("SVM", "Multinomial", 
+	"RF", "MLP", "KNN", "DT", "NB", "Random", "Majority"))
 
 df.agg.melted = melt(df.agg, id.vars = c(1, 2, 5, 6))
 
@@ -103,20 +105,20 @@ aux2 = dplyr::filter(df.agg.melted, variable == "FScore")
 aux2 = merge(aux2, fsc.sd, by = c("task", "algo"))
 df.agg.melted = rbind(aux1, aux2)
 
-
-g2 = ggplot(df.agg.melted, aes(x = algo.name, y = value, group = Setup, 
+# plotting :)
+g2 = ggplot(df.agg.melted, aes(x = algo.name,	y = value, group = Setup, 
 	colour = Setup, linetype = Setup, shape = Setup, fill = Setup,  
 	ymin = value-sd, ymax = value+sd))
 g2 = g2 + geom_line() + geom_point() + theme_bw()
 g2 = g2 + geom_ribbon(alpha = .25, colour = NA)
 
 g2 = g2 + facet_grid(variable~task, scales = "free")
-g2 = g2 + labs(x = "Algorithm", y = "Value")
+g2 = g2 + labs(x = "\nAlgorithm", y = "Value")
 g2 = g2 + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 g2 = g2 + scale_fill_manual(values = c("red", "black"))
 g2 = g2 + scale_colour_manual(values = c("red", "black"))
-# g2 
-ggsave(g2, file = "plots/fig_original_vs_balanced.pdf", width = 9.66, height = 4.07)
+g2 
+ggsave(g2, file = "plots/fig_original_vs_balanced.pdf", width = 7.55, height = 5.47)
 
 
 # TODO: check wilcoxon pair test (balanced vs original)
