@@ -105,7 +105,10 @@ aux2 = dplyr::filter(df.agg.melted, variable == "FScore")
 aux2 = merge(aux2, fsc.sd, by = c("task", "algo"))
 df.agg.melted = rbind(aux1, aux2)
 
+# --------------
 # plotting :)
+# --------------
+
 g2 = ggplot(df.agg.melted, aes(x = algo.name,	y = value, group = Setup, 
 	colour = Setup, linetype = Setup, shape = Setup, fill = Setup,  
 	ymin = value-sd, ymax = value+sd))
@@ -115,13 +118,68 @@ g2 = g2 + geom_ribbon(alpha = .25, colour = NA)
 g2 = g2 + facet_grid(variable~task, scales = "free")
 g2 = g2 + labs(x = "\nAlgorithm", y = "Value")
 g2 = g2 + theme(axis.text.x = element_text(angle = 90, hjust = 1))
-g2 = g2 + scale_fill_manual(values = c("red", "black"))
-g2 = g2 + scale_colour_manual(values = c("red", "black"))
-g2 
+g2 = g2 + scale_fill_manual(values = c("magenta", "black"))
+g2 = g2 + scale_colour_manual(values = c("magenta", "black"))
+# not saving it yet ...
+
+# --------------
+#  Statistical tests (wilcoxon pair test)
+# --------------
+
+df.stats = evaluateStatisticalDifferences(res = res, alpha = 0.05)
+write.csv(df.stats, file = "results/stats_original_vs_balanced.csv")
+
+rm.ids = which(df.stats$algo.name %in% c("Random", "Majority"))
+df.stats = df.stats[-rm.ids,]
+
+# which cases balanced was better statistically in both measures
+bac.ids = which(df.stats$BAC & df.stats$Highest.BAC == "balanced")
+fsc.ids = which(df.stats$FScore & df.stats$Highest.FScore == "balanced")
+balanced.ids = union(bac.ids, fsc.ids)
+
+bac2.ids = which(df.stats$BAC & df.stats$Highest.BAC == "original")
+fsc2.ids = which(df.stats$FScore & df.stats$Highest.FScore == "original")
+original.ids = union(bac2.ids, fsc2.ids)
+
+# ------------------
+# aux dfs
+# ------------------
+
+# ---------------------------------
+# TODO: improve this code below (doing things twice :/)
+# ---------------------------------
+
+df.stats.bal = df.stats[balanced.ids, ]
+df.stats.org = df.stats[original.ids, ]
+
+df.stats.bal.melted = melt(df.stats.bal, id.vars = c(1,2,4,6))
+df.stats.org.melted = melt(df.stats.org , id.vars = c(1,2,4,6))
+
+df.sign.bal = dplyr::filter(df.stats.bal.melted, value == TRUE)
+df.sign.bal$value = 0.2
+sel.bal = df.sign.bal[,c(1,2,5,6)]
+#  need to add this, to work :/
+sel.bal$Setup = NA
+sel.bal$sd = 0
+
+df.sign.org = dplyr::filter(df.stats.org.melted, value == TRUE)
+df.sign.org$value = 0.2
+sel.org = df.sign.org[,c(1,2,5,6)]
+#  need to add this, to work :/
+sel.org$Setup = NA
+sel.org$sd = 0
+
+# ---------------------------------
+# ---------------------------------
+
+#works :)
+g2 = g2 + geom_point(data = sel.bal, fill = "darkGreen", col = "darkGreen", 
+	pch = 24, lwd = 1.5) 
+g2 = g2 + geom_point(data = sel.org, fill = "red", col = "red", 
+	pch = 25, lwd = 1.5) 
+# g2 
+
 ggsave(g2, file = "plots/fig_original_vs_balanced.pdf", width = 7.55, height = 5.47)
-
-
-# TODO: check wilcoxon pair test (balanced vs original)
 
 # ---------------
 # Heatmap: Rankings
