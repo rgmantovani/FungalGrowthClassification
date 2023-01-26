@@ -1,4 +1,4 @@
-"","Var1","Var2","bac.significance","highest.bac","fsc.significance","highest.fsc"
+"","task","algo.name","BAC","Highest.BAC","FScore","Highest.FScore"
 "1","Aggregated","DT",TRUE,"balanced",TRUE,"balanced"
 "2","Color Channels","DT",TRUE,"balanced",TRUE,"balanced"
 "3","Complete","DT",TRUE,"balanced",FALSE,"balanced"

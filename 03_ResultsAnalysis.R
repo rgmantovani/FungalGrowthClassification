@@ -126,6 +126,8 @@ g2 = g2 + scale_colour_manual(values = c("magenta", "black"))
 #  Statistical tests (wilcoxon pair test)
 # --------------
 
+cat(" @ Computing statistical significance\n")
+
 df.stats = evaluateStatisticalDifferences(res = res, alpha = 0.05)
 write.csv(df.stats, file = "results/stats_original_vs_balanced.csv")
 
@@ -140,10 +142,6 @@ balanced.ids = union(bac.ids, fsc.ids)
 bac2.ids = which(df.stats$BAC & df.stats$Highest.BAC == "original")
 fsc2.ids = which(df.stats$FScore & df.stats$Highest.FScore == "original")
 original.ids = union(bac2.ids, fsc2.ids)
-
-# ------------------
-# aux dfs
-# ------------------
 
 # ---------------------------------
 # TODO: improve this code below (doing things twice :/)
@@ -179,6 +177,7 @@ g2 = g2 + geom_point(data = sel.org, fill = "red", col = "red",
 	pch = 25, lwd = 1.5) 
 # g2 
 
+# Now we can save it
 ggsave(g2, file = "plots/fig_original_vs_balanced.pdf", width = 7.55, height = 5.47)
 
 # ---------------
