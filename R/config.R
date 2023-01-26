@@ -18,14 +18,14 @@ ALGOS.MLR  = c("rpart", "kknn", "multinom", "ranger", "svm", "nnet", "naiveBayes
 # ---------------------------
 
 
-library(mlr)
-library(tidyverse)
-library(caret)
-library(corrplot)
-library(scales)
-library(factoextra)
-library(agricolae)
-library(metrica)
+library(mlr,        quietly = TRUE, warn.conflicts = FALSE)
+library(tidyverse,  quietly = TRUE, warn.conflicts = FALSE)
+library(caret,      quietly = TRUE, warn.conflicts = FALSE)
+library(corrplot,   quietly = TRUE, warn.conflicts = FALSE)
+library(scales,     quietly = TRUE, warn.conflicts = FALSE)
+library(factoextra, quietly = TRUE, warn.conflicts = FALSE)
+library(agricolae,  quietly = TRUE, warn.conflicts = FALSE)
+library(metrica,    quietly = TRUE, warn.conflicts = FALSE)
 
 # ---------------------------
 # Seed for reproducibility

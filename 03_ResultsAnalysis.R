@@ -52,17 +52,19 @@ cat(" @ Plot: Performances' Boxplot\n")
 # Using algorithm without overbagging
 ovb.ids = which(grepl(x = results$algo, pattern = "overbagged"))
 df = results[-ovb.ids,]
-
-# melt no data frame
+df$algo = renameAlgoFactors(df$algo)
 df.melt = melt(df, id.vars = c(1,2,3,6,7))
 
 # facet_grid with task~measure 
-gf = ggplot(data = df.melt, mapping = aes(x = algo, y = value, group = algo))
+gf = ggplot(data = df.melt, 
+	mapping = aes(x = reorder(algo, value, decreasing = TRUE),
+	 y = value, group = algo))
 gf = gf + geom_boxplot() + facet_grid(variable~task)
 gf = gf + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 gf = gf + geom_hline(yintercept=0.8, linetype="dashed", color = "red")
+gf = gf + labs(x = "Algorithm", y = "Value")
 # gf
-ggsave(gf, file = "plots/fig_algorithms_performance.pdf", width = 8.8, height = 5.16)
+ggsave(gf, file = "plots/fig_algorithms_performance.pdf", width = 6.29, height = 7.54)
 
 # ---------------
 # Lineplot: Original vs Overbagged algos
