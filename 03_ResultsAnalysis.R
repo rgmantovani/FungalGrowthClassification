@@ -2,9 +2,9 @@
 ##-------------------------------------------------------------------------------------------
 
 cat(" @ Loading all required files:\n")
-library(ggplot2)
-library(reshape2)
-library(dplyr)
+library(ggplot2,  quietly = TRUE, warn.conflicts = FALSE)
+library(reshape2, quietly = TRUE, warn.conflicts = FALSE)
+library(dplyr,    quietly = TRUE, warn.conflicts = FALSE)
 
 ## ------------------------------------------------------------------------------------------------
 ## ------------------------------------------------------------------------------------------------
@@ -20,7 +20,12 @@ for(file in R.files) {
 
 # use load() to read it again
 cat(" @ Loading results \n")
-load(file = "results/mlr_results_complete.RData", verbose = TRUE)
+if(!file.exists("results/mlr_results_complete.RData")) {
+ 	stop(" - There is no results' file! Please, run ML experiments first.\n")
+ 	q(save = "no",  runLast = FALSE)
+} else {
+	load(file = "results/mlr_results_complete.RData", verbose = TRUE)	
+}
 
 ##-------------------------------------------------------------------------------------------
 ##-------------------------------------------------------------------------------------------
@@ -35,6 +40,7 @@ results$setup[ids] = "Balanced"
 results$algo.name = results$algo
 results$algo.name = gsub(x = results$algo.name, pattern = ".overbagged", replacement = "")
 
+# not using Gmean results
 results$gmean = NULL
 
 # ---------------
@@ -347,10 +353,10 @@ sel.df = m3[sel.ids,]
 # table(m3$truth, m3$Voting)
    
 #       1   2   3
-#   1 312  12   1
-#   2   9  90   7
-#   3   5   6  94
-
+#   1 312  12   1 - 13
+#   2   9  90   7 - 16
+#   3   5   6  94 - 11
+                  # - 40
 
 ##------------------------------------------------------------------------------------------
 #  Interpretability plots
