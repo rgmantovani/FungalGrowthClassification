@@ -241,7 +241,6 @@ ggsave(g3, file = "plots/fig_average_ranking.pdf", width = 7.99, height = 4.39)
 # ---------------
 
 # TOP-4 (SVM, MLP.balanced, Multinomial, RF) 
-
 # 15     Aggregated       classif.nnet.overbagged 0.8708687 0.8694717 0.905806286
 # 5      Aggregated                   classif.svm 0.8583093 0.8660905 0.892570721
 # 12     Aggregated   classif.multinom.overbagged 0.8582311 0.8582335 0.896718862
@@ -302,7 +301,6 @@ df2 = aggregatePredictions(df = df2)
 df3 = preds$Aggregated$classif.multinom.overbagged
 df3 = aggregatePredictions(df = df3)
 
-
 # Compute voting predictions
 voting.df    = cbind(df1$response, df2$response, df3$response)
 voting.preds = voting(voting.df = voting.df)
@@ -327,7 +325,6 @@ dff$id = factor(dff$id, levels = unique(dff$id))
 
 dff$variable = factor(dff$variable, levels = c("Reference", "Voting", "Multinomial", 
 	"MLP", "SVM"))
-
 
 cat(" @ Plot: Voting Predictions \n")
 
@@ -445,7 +442,7 @@ dev.off()
 ## Random Forest
 # --------------------------
 
-cat(" @ Plot: Ranfom Forest (importance) \n")
+cat(" @ Plot: Random Forest (importance) \n")
 
 mlrTask = mlr::makeClassifTask(df_all2_resc[,-1], id = "test", target = "rotulo")
 lrn     = mlr::makeLearner("classif.ranger", importance = "permutation")
@@ -466,7 +463,71 @@ ggsave(g_importance, file = "plots/fig_randomForest.pdf", units = "in", width = 
 	height = 6, dpi = 300, pointsize = 20)
 
 ##------------------------------------------------------------------------------------------
+# DL results
 ##------------------------------------------------------------------------------------------
+
+cat(" @ Plot: Deep Learning vs Traditional ML \n")
+
+all.files = list.files(path = "results/deepLearningResults", full.names = TRUE)
+# [1] "results/deepLearningResults/DNN.csv"        
+# [2] "results/deepLearningResults/DNN_with_DA.csv"
+# [3] "results/deepLearningResults/Targets.csv"    
+# [4] "results/deepLearningResults/VGG.csv"        
+# [5] "results/deepLearningResults/VGG_with_DA.csv"
+
+# which file is the target file
+target.id   = grep(x = all.files, pattern = "Targets")
+target.file = all.files[target.id] 
+
+# target data
+df.targets = readDLFile(dl.file = target.file)
+dl.files   = all.files[-3] 
+
+# DL results
+aux.dl = lapply(dl.files,function(file) {
+	# print(file) # debug
+	algo.name = gsub(x = file, pattern = paste0("results/deepLearningResults/|.csv"), 
+		replacement = "")
+	dl.results = readDLFile(dl.file = file)
+	dl.measures = evaluateDLModels(df.targets = df.targets, df.dnn = dl.results)	
+	dl.measures$algo = algo.name
+	dl.measures$iter = 1:100
+	return(dl.measures)
+}) 
+ 
+dl.results = do.call("rbind", aux.dl)
+# head(dl.results)
+
+# 15     Aggregated       classif.nnet.overbagged 0.8708687 0.8694717 0.905806286
+# 5      Aggregated                   classif.svm 0.8583093 0.8660905 0.892570721
+# 12     Aggregated   classif.multinom.overbagged 0.8582311 0.8582335 0.896718862
+
+ml.results = rbind(
+	nnet.results[,c(2:5)],
+	svm.results [,c(2:5)],
+	mult.results[,c(2:5)]
+)
+
+colnames(ml.results)[3:4] = c("BAC", "FScore")
+
+dl.ml = rbind(ml.results, dl.results)
+dl.ml$algo = renameAlgoFactors(dl.ml$algo)
+
+df.melt = reshape2::melt(dl.ml, id.vars = c(1,2))
+
+g6 = ggplot(df.melt, aes(x = reorder(algo, value), y = value))
+g6 = g6 + geom_violin(trim=FALSE, fill='#A4A4A4')
+g6 = g6 + geom_boxplot(width=0.1) + theme_bw()
+g6 = g6 + facet_grid(~variable, scales = "free")
+g6 = g6 + labs(x = "Algorithm", y = "Value")
+g6 = g6 + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+# g6 
+ggsave(g6, file = "plots/fig_dl_vs_traditionalML.pdf", width = 5.73, height = 4.04)
+
+
+##------------------------------------------------------------------------------------------
+##------------------------------------------------------------------------------------------
+
 
 cat("------------------------\n")
 cat (" @Done :)\n")
