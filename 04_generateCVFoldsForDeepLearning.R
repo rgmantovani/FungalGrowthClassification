@@ -22,7 +22,6 @@ print(rin)
 df.train = do.call("cbind.fill", rin$train.inds)
 df.train = as.data.frame(df.train)
 colnames(df.train) = paste("Train", 1:100)
-# write.csv(df.train, file = "data/Training_folds.csv", row.names = FALSE)
 write.csv2(df.train, file = "data/Training_folds.csv", row.names = FALSE)
 
 # --------------------
@@ -32,7 +31,6 @@ write.csv2(df.train, file = "data/Training_folds.csv", row.names = FALSE)
 df.test = do.call("cbind.fill", rin$test.inds)
 df.test = as.data.frame(df.test)
 colnames(df.test) = paste("Test", 1:100)
-# write.csv(df.test, file = "data/Testing_folds.csv", row.names = FALSE)
 write.csv2(df.test, file = "data/Testing_folds.csv", row.names = FALSE)
 
 ## ------------------------------------------------------------------------------------------------
