@@ -1,5 +1,15 @@
-##-------------------------------------------------------------------------------------------
-##-------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------
+## Script name: ResultsAnalysis
+##
+## Purpose of script: automate analysis and generate images/plots
+##
+## Author: Edgar de Souza Vismara
+##         Rafael Gomes Mantovani
+##
+## Date Created: 2023-01-06
+## ------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------
 
 cat(" @ Loading all required files:\n")
 library(ggplot2,  quietly = TRUE, warn.conflicts = FALSE)
@@ -237,7 +247,7 @@ g3 = g3 + scale_fill_gradient2(high = "red", mid = "white", low = "blue", midpoi
 ggsave(g3, file = "plots/fig_average_ranking.pdf", width = 7.99, height = 4.39)
 
 # ---------------
-# Best models - matriz de confusão
+# Best models - confusion matrices
 # ---------------
 
 # TOP-4 (SVM, MLP.balanced, Multinomial, RF) 

@@ -1,5 +1,15 @@
 ## ------------------------------------------------------------------------------------------------
 ## ------------------------------------------------------------------------------------------------
+## Script name: MLExperimentsMLR
+##
+## Purpose of script: run ML experiments based on the mlr package
+##
+## Author: Edgar de Souza Vismara
+##         Rafael Gomes Mantovani
+##
+## Date Created: 2023-01-06
+## ------------------------------------------------------------------------------------------------
+## ------------------------------------------------------------------------------------------------
 
 cat(" @ Loading all required files:\n")
 R.files = list.files(path = "R", full.names = TRUE)
@@ -166,15 +176,9 @@ task_rest = mlr::makeClassifTask(id = "Other Features", data = as.data.frame(df_
 task_all2 = mlr::makeClassifTask(id = "Aggregated", data = as.data.frame(df_all2_resc), target = "rotulo")
 
 ## ------------------------------------------------------------------------------------------
+
 #  list of all tasks
 tasks = list(task_cor, task_all, task_esta, task_rest, task_all2)
-
-# smoted.tasks = lapply(tasks, function(task) {
-#   sm.task = makeMulticlassSMOTEDTask(task = task)
-#   return(sm.task)
-# })
-# tasks = c(tasks, smoted.tasks)
-
 print(tasks)
 
 ## ------------------------------------------------------------------------------------------
