@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -ex
+
+Rscript 01_ExploratoryAnalysis.R "$@"
+
+Rscript 02_MLExperimentsMLR.R "$@"
+
+Rscript 03_generateCVFoldsForDeepLearning.R "$@"
+
+jupyter nbconvert \
+	--to 'html' \
+	--ExecutePreprocessor.allow_errors=True \
+	--ExecutePreprocessor.timeout=-1 \
+	--FilesWriter.build_directory=../results \
+	--execute 04_deepLearningExperiments.ipynb
+
+Rscript 05_ResultsAnalysis.R "$@"
