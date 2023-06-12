@@ -26,18 +26,8 @@ You can run all three scripts separately, but there is a *natural* dependency be
 
 ## Running the code
 
-To run R scripts, please, use the following commands:
-
-```
-Rscript 01_ExploratoryAnalysis.R
-Rscript 02_MLExperimentsMLR.R
-Rscript 03_generateCVFoldsForDeepLearning.R
-pythonscript 04_deepLearningExperiments.ipynb
-Rscript 05_ResultsAnalysis.R
-```
-
-Just use the commented commands to the other scripts.
-To run Deep Learning experiments, please, just execute the jupyter notebook. Maybe some relative paths need to be edited in order to find the correct place where the images are. 
+To run the complete analisys execute the bash script file named run
+Maybe some relative paths need to be edited in order to find the correct place where the images are. 
 
 ## Contact
 
