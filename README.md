@@ -26,7 +26,8 @@ You can run all three scripts separately, but there is a *natural* dependency be
 
 ## Running the code
 
-To run the complete analisys execute the bash script file named run
+To run the complete analisys execute the bash script file named "run" located in the code folder.
+
 Maybe some relative paths need to be edited in order to find the correct place where the images are. 
 
 ## Contact
