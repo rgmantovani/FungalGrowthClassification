@@ -46,6 +46,10 @@ if(!dir.exists("~/capsule/results/deepLearningResults")) {
   dir.create("~/capsule/results/deepLearningResults", showWarnings=FALSE, recursive=TRUE)
 }
 
+if(!dir.exists("~/capsule/data/dataset")) {
+  dir.create("~/capsule/data/dataset", showWarnings=FALSE, recursive=TRUE)
+}
+
 ## ------------------------------------------------------------------------------------------
 ## 2. Preprocessing data
 ## ------------------------------------------------------------------------------------------
