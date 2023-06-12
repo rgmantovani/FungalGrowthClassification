@@ -39,8 +39,8 @@ evaluateStatisticalDifferences = function(res, alpha = 0.05) {
 		# BAC Significance
 		# -----------------
 
-		bac.wilcoxon = wilcox.test(x = original.values$bac, 
-			y = balanced.values$bac, paired = TRUE)
+		bac.wilcoxon = suppressWarnings(wilcox.test(x = original.values$bac, 
+			y = balanced.values$bac, paired = TRUE))
 		bac.significance = bac.wilcoxon$p.value < alpha
 
 		# highest BAC (which setup?)
@@ -55,8 +55,8 @@ evaluateStatisticalDifferences = function(res, alpha = 0.05) {
 		# FScore Significance
 		# -----------------
 
-		fsc.wilcoxon = wilcox.test(x = original.values$multiclass.fscore, 
-			y = balanced.values$multiclass.fscore, paired = TRUE)
+		fsc.wilcoxon = suppressWarnings(wilcox.test(x = original.values$multiclass.fscore, 
+			y = balanced.values$multiclass.fscore, paired = TRUE))
 		fsc.significance = fsc.wilcoxon$p.value < alpha
 
 		# highest fscore (which setup?)

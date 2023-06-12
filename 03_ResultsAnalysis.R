@@ -12,9 +12,14 @@
 ## ------------------------------------------------------------------------------------------------
 
 cat(" @ Loading all required files:\n")
-library(ggplot2,  quietly = TRUE, warn.conflicts = FALSE)
-library(reshape2, quietly = TRUE, warn.conflicts = FALSE)
-library(dplyr,    quietly = TRUE, warn.conflicts = FALSE)
+library(ggplot2,    quietly = TRUE, warn.conflicts = FALSE)
+library(reshape2,   quietly = TRUE, warn.conflicts = FALSE)
+library(dplyr,      quietly = TRUE, warn.conflicts = FALSE)
+library(ranger,     quietly = TRUE, warn.conflicts = FALSE)
+library(rpart,      quietly = TRUE, warn.conflicts = FALSE)
+library(rpart.plot, quietly = TRUE, warn.conflicts = FALSE)
+
+dir.create("plots/", recursive = TRUE, showWarnings = FALSE)
 
 ## ------------------------------------------------------------------------------------------------
 ## ------------------------------------------------------------------------------------------------
@@ -34,7 +39,7 @@ if(!file.exists("results/mlr_results_complete.RData")) {
  	stop(" - There is no results' file! Please, run ML experiments first.\n")
  	q(save = "no",  runLast = FALSE)
 } else {
-	load(file = "results/mlr_results_complete.RData", verbose = TRUE)	
+	load(file = "results/mlr_results_complete.RData", verbose = FALSE)	
 }
 
 ##-------------------------------------------------------------------------------------------
@@ -262,7 +267,6 @@ preds = mlr::getBMRPredictions(bmr = res,
 	learner.ids = c("classif.svm", "classif.nnet.overbagged", "classif.multinom.overbagged", "classif.ranger"),
 	task.ids = c("Aggregated", "Complete"))
 
-
 # ---------------
 # Plot: confusion matrices
 # ---------------
@@ -320,8 +324,8 @@ df4$response = voting.preds
 
 # generating an unique data frame for plot issues
 m1 = merge(df1, df2, by = c("id", "truth", "set", "iter"))
-m2 = merge(m1, df3, by = c("id", "truth", "set", "iter"))
-m3 = merge(m2, df4, by = c("id", "truth", "set", "iter"))
+m2 = merge(m1, df3,  by = c("id", "truth", "set", "iter"))
+m3 = suppressWarnings(merge(m2, df4,  by = c("id", "truth", "set", "iter")))
 
 colnames(m3)[5:8] = c("SVM", "MLP", "Multinomial", "Voting")
 m3 = m3[order(m3$truth),]
@@ -352,7 +356,7 @@ ggsave(g5, file = "plots/fig_voting_predictions.pdf", width = 7.45, height = 5.8
 # Voting preformance
 # --------------------------
 
-print(" @ Voting Performance: ")
+cat(" @ Voting Performance: \n")
 
 obj.voting = caret::confusionMatrix(
 	as.factor(m3$Voting), #pred
@@ -363,17 +367,17 @@ obj.voting = caret::confusionMatrix(
   f1[is.na(f1)] = 0
   f1 = mean(f1)
 
-cat(" F-Measure:", f1, "\n") # [1] 0.9026198
+cat("   -> F-Measure:", f1, "\n") # [1] 0.9026198
 
 bc = mlr::measureBAC(truth = m3$truth, response = as.factor(m3$Voting))
-cat(" Balanced accuracy: ", bc, "\n") # [1] 0.9014316
+cat("   -> Balanced accuracy: ", bc, "\n") # [1] 0.9014316
 
 # --------------------------
 # Checking images missclassified
 # --------------------------
 
 sel.ids = which(m3$truth != m3$Voting)
-sel.df = m3[sel.ids,]
+sel.df  = m3[sel.ids,]
 
 # sel.df
 #      id truth  set iter SVM MLP Multinomial Voting
@@ -418,13 +422,6 @@ sel.df = m3[sel.ids,]
 # 391 450     3 test    1   1   3           1      1
 # 406 464     3 test    1   1   3           2      1
 
-# table(m3$truth, m3$Voting)
-   
-#       1   2   3
-#   1 312  12   1 - 13
-#   2   9  90   7 - 16
-#   3   5   6  94 - 11
-                  # - 40
 
 ##------------------------------------------------------------------------------------------
 #  Interpretability plots
@@ -437,9 +434,6 @@ df_all2_resc = read.csv(file = "data/dataset/task_aggregated.csv", row.names = 1
 # --------------------------
 
 cat(" @ Plot: Decision Tree \n")
-
-library(rpart)
-library (rpart.plot)
 
 tree = rpart(rotulo~., data=df_all2_resc[,-1], method = "class")
 # rpart.plot(tree,fallen.leaves=F, tweak=1,type=1,cex=0.35)
@@ -506,17 +500,23 @@ aux.dl = lapply(dl.files,function(file) {
 }) 
  
 dl.results = do.call("rbind", aux.dl)
-# head(dl.results)
+
+# -----------------------------------------
+# Best algo results
+# -----------------------------------------
 
 # 15     Aggregated       classif.nnet.overbagged 0.8708687 0.8694717 0.905806286
 # 5      Aggregated                   classif.svm 0.8583093 0.8660905 0.892570721
 # 12     Aggregated   classif.multinom.overbagged 0.8582311 0.8582335 0.896718862
 
-ml.results = rbind(
-	nnet.results[,c(2:5)],
-	svm.results [,c(2:5)],
-	mult.results[,c(2:5)]
-)
+nnet.results  = dplyr::filter(results, task == "Aggregated" & algo == "classif.nnet.overbagged")
+svm.results   = dplyr::filter(results, task == "Aggregated" & algo == "classif.svm")
+mult.results  = dplyr::filter(results, task == "Aggregated" & algo == "classif.multinom.overbagged")
+
+ml.results = rbind(	nnet.results[,c(2:5)], svm.results [,c(2:5)], mult.results[,c(2:5)])
+
+# ---------------------------
+# ---------------------------
 
 colnames(ml.results)[3:4] = c("BAC", "FScore")
 
@@ -533,7 +533,6 @@ g6 = g6 + labs(x = "Algorithm", y = "Value")
 g6 = g6 + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 # g6 
 ggsave(g6, file = "plots/fig_dl_vs_traditionalML.pdf", width = 5.73, height = 4.04)
-
 
 ##------------------------------------------------------------------------------------------
 ##------------------------------------------------------------------------------------------
