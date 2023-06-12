@@ -292,7 +292,7 @@ for(i in 1:4) {
 	g4 = g4 + theme_bw() + guides(fill = "none", text = "none", alpha = "none")
 	g4 = g4 + labs(x = "True", y = "Predicted")
 	# g4 
-	ggsave(g4, file = paste0("plots/fig_", lrns[i], "_confusion_matrix.pdf"), width = 3.19, height = 2.62)
+	ggsave(g4, file = paste0("~/capsule/plots/fig_", lrns[i], "_confusion_matrix.pdf"), width = 3.19, height = 2.62)
 
 }
 
