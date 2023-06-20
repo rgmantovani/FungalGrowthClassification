@@ -42,3 +42,18 @@ To run Deep Learning experiments, please, just execute the jupyter notebook. May
 
 - Edgar de Souza Vismara (edgarvismara@utfpr.edu.br), Federal Technology University - Paraná (UTFPR) - Dois Vizinhos - PR, Brazil.
 - Rafael Gomes Mantovani (rgmantovani@gmail.com), Federal Technology University - Paraná (UTFPR) - Apucarana - PR, Brazil.
+
+If you use our code, please cite us:
+```
+@article{,
+  title = {Classification of the growth level of fungal colonies in solid medium: A machine learning approach},
+  journal = {Expert Systems with Applications},
+  pages = {120872},
+  year = {2023},
+  issn = {0957-4174},
+  doi = {https://doi.org/10.1016/j.eswa.2023.120872},
+  url = {https://www.sciencedirect.com/science/article/pii/S095741742301374X},
+  author = {Edgar {de Souza Vismara} and Lilian {de Souza Vismara} and José Luis Seixas and Francisco Carlos Monteiro Souza and Rafael Gomes Mantovani},
+  keywords = {Fungal growth, Image classification, Machine learning},
+}
+```
